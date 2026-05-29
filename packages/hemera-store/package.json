@@ -1,0 +1,20 @@
+{
+  "name": "hemera-store",
+  "version": "2.0.0",
+  "description": "This is a store interface for Hemera to be interoperable with most database interfaces",
+  "main": "index.js",
+  "repository": {
+    "url": "git@github.com:hemerajs/hemera.git",
+    "type": "git"
+  },
+  "scripts": {
+    "lint": "eslint index.js",
+    "test": "nyc mocha -t 5000 ./test/**/*.js",
+    "coverage": "yarn run test && nyc report --reporter=html"
+  },
+  "author": "Dustin Deus (https://github.com/StarpTech)",
+  "license": "MIT",
+  "dependencies": {
+    "joi": "10.4.x"
+  }
+}
