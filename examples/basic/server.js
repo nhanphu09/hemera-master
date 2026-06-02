@@ -10,12 +10,19 @@ hemera.ready(() => {
     topic: 'math',
     cmd: 'add'
   }, function (req, cb) {
-    // In ra màn hình PID của server này khi nó nhận được yêu cầu để phân biệt các bản sao gánh tải
-    console.log(`⚡ [Server PID: ${process.pid}] Đang gánh tải xử lý: ${req.a} + ${req.b}`)
-    
-    // Trả về kết quả
+    // GIẢ LẬP SỰ CỐ (Fault Tolerance): 
+    // Nếu client gửi số a = 5, server này sẽ bị "treo" mất 3 giây trước khi trả lời
+    if (req.a === 5) {
+      console.log(`⏳ [Server PID: ${process.pid}] Gặp tác vụ nặng/lỗi, giả lập treo trong 3 giây...`)
+      setTimeout(() => {
+        cb(null, req.a + req.b)
+      }, 3000)
+      return
+    }
+
+    console.log(`⚡ [Server PID: ${process.pid}] Đang xử lý thành công: ${req.a} + ${req.b}`)
     cb(null, req.a + req.b)
   })
   
-  console.log(`✅ [Server PID: ${process.pid}] Đã khởi động và sẵn sàng nhận task!`)
+  console.log(`✅ [Server PID: ${process.pid}] Server gánh tải đã sẵn sàng!`)
 })
