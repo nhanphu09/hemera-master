@@ -13,7 +13,7 @@ hemera.ready(() => {
     // GIẢ LẬP SỰ CỐ (Fault Tolerance): 
     // Nếu client gửi số a = 5, server này sẽ bị "treo" mất 3 giây trước khi trả lời
     if (req.a === 5) {
-      console.log(`⏳ [Server PID: ${process.pid}] Gặp tác vụ nặng/lỗi, giả lập treo trong 3 giây...`)
+      this.log.info(`⚡ [Server PID: ${process.pid}] Đang gánh tải xử lý: ${req.a} + ${req.b}`)
       setTimeout(() => {
         cb(null, req.a + req.b)
       }, 3000)

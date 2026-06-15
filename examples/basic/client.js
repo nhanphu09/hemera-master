@@ -1,7 +1,8 @@
 'use strict'
 
 const Hemera = require('./../../packages/hemera')
-const nats = require('nats').connect({ url: 'nats://127.0.0.1:4222' })
+const natsUrl = process.env.NATS_URL || 'nats://127.0.0.1:4222'
+const nats = require('nats').connect({ url: natsUrl })
 
 const hemera = new Hemera(nats, { logLevel: 'info' })
 
