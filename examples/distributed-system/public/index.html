@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Distributed Order System</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:disabled {
+      background: gray;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 16px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: #e0f7e9;
+      color: #1a7f37;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .services {
+      margin-top: 10px;
+    }
+
+    .service {
+      padding: 8px;
+      margin: 5px 0;
+      background: #f1f1f1;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .loading {
+      color: orange;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>Distributed Order System</h1>
+
+<div class="container">
+
+  <!-- ORDER FORM -->
+  <div class="card">
+    <h2>Create Order</h2>
+
+    <input id="product" placeholder="Product (e.g. Pizza)" />
+    <input id="quantity" type="number" placeholder="Quantity" />
+
+    <button id="btn" onclick="createOrder()">
+      Create Order
+    </button>
+
+    <div id="status" class="result"></div>
+  </div>
+
+  <div class="card">
+    <h2>System Status</h2>
+
+    <div class="services">
+      <div class="service">🟢 order-1</div>
+      <div class="service">🟢 order-2</div>
+      <div class="service">🟢 order-3</div>
+    </div>
+
+    <hr />
+
+    <h3>Latest Response</h3>
+    <div id="result"></div>
+  </div>
+
+</div>
+
+<script>
+async function createOrder() {
+  const product = document.getElementById('product').value
+  const quantity = document.getElementById('quantity').value
+
+  const btn = document.getElementById('btn')
+  const status = document.getElementById('status')
+
+  btn.disabled = true
+  status.innerHTML = "<span class='loading'>Processing...</span>"
+
+  try {
+    const response = await fetch('/order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ product, quantity })
+    })
+
+    const data = await response.json()
+
+    document.getElementById('result').innerHTML = `
+      <div class="badge">SUCCESS</div><br>
+      Order processed by: <b>${data.processedBy}</b><br>
+      Product: ${data.order.product}<br>
+      Quantity: ${data.order.quantity}
+    `
+
+    status.innerHTML = "Order completed successfully"
+
+  } catch (err) {
+    status.innerHTML = "Error: " + err.message
+  }
+
+  btn.disabled = false
+}
+</script>
+
+</body>
+</html>

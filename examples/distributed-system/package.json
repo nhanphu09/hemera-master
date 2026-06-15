@@ -1,0 +1,14 @@
+{
+  "name": "distributed-order-system",
+  "version": "1.0.0",
+  "main": "order-service.js",
+  "scripts": {
+    "start": "node order-service.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.0.0",
+    "nats": "^1.4.12",
+    "nats-hemera": "^6.1.0"
+  }
+}

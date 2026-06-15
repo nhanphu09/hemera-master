@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+
+  order1:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "npm install && node order-service.js"
+    environment:
+      INSTANCE: order-1
+    depends_on:
+      - nats
+      - mongo
+
+  order2:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "npm install && node order-service.js"
+    environment:
+      INSTANCE: order-2
+    depends_on:
+      - nats
+      - mongo
+
+  order3:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "npm install && node order-service.js"
+    environment:
+      INSTANCE: order-3
+    depends_on:
+      - nats
+      - mongo
+
+  web:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./:/app
+    command: sh -c "npm install && node web-server.js"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - nats
